@@ -1,20 +1,24 @@
 session_name: docker
 windows:
-- layout: 6da5,239x56,0,0[239x34,0,0,65,239x21,0,35{119x21,0,35,66,119x21,120,35,67}]
+- window_name: dockerfiles
+  layout: 6da5,239x56,0,0[239x34,0,0,65,239x21,0,35{119x21,0,35,66,119x21,120,35,67}]
   options:
     automatic-rename: 'off'
   start_directory: ./
   panes:
-  - vim
+  - shell_command:
+    - vim
+    - :e README.rst
   - pane
   - pane
-  window_name: sys
-- layout: 6da5,239x56,0,0[239x34,0,0,65,239x21,0,35{119x21,0,35,66,119x21,120,35,67}]
+- window_name: postgres
+  layout: 6da5,239x56,0,0[239x34,0,0,65,239x21,0,35{119x21,0,35,66,119x21,120,35,67}]
   options:
     automatic-rename: 'off'
   start_directory: ./postgres
   panes:
-  - vim
+  - shell_command:
+    - vim
+    - :e Dockerfile
   - pane
   - pane
-  window_name: postgres
