@@ -12,6 +12,7 @@ RUN cd postgresql && make install
 RUN cd postgresql/contrib make all
 RUN cd postgresql/contrib make install
 RUN cp postgresql/contrib/start-scripts/linux  /etc/init.d/postgresql 
+RUN chmod +x /etc/init.d/postgresql
 RUN update-rc.d postgresql defaults
 RUN echo 'PATH=$PATH:/usr/local/pgsql/bin; export PATH' > /etc/profile.d/postgresql.sh
 RUN echo 'MANPATH=$MANPATH:/usr/local/pgsql/man; export MANPATH' >> /etc/profile.d/pgmanual.sh
@@ -21,6 +22,11 @@ RUN . /etc/profile
 RUN adduser postgres --home /usr/local/pgsql --disabled-password --gecos ""
 RUN mkdir -p /var/log/pgsql
 RUN chown -R postgres:postgres /var/log/pgsql/
+
 RUN mkdir /usr/local/pgsql/data
 RUN chown -R postgres:postgres /usr/local/pgsql/data
-RUN su - postgres -c "createuser -P -d -r -s docker"
+RUN su - postgres -c "/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data"
+
+cmd service postgresql start && bash
+
+#RUN su - postgres -c "createuser -P -d -r -s docker"
