@@ -1,10 +1,10 @@
 session_name: docker
+start_directory: ./
 windows:
 - window_name: dockerfiles
   layout: 6da5,239x56,0,0[239x34,0,0,65,239x21,0,35{119x21,0,35,66,119x21,120,35,67}]
   options:
     automatic-rename: 'off'
-  start_directory: ./
   panes:
   - shell_command:
     - vim
@@ -15,7 +15,7 @@ windows:
   layout: 6da5,239x56,0,0[239x34,0,0,65,239x21,0,35{119x21,0,35,66,119x21,120,35,67}]
   options:
     automatic-rename: 'off'
-  start_directory: ./postgresql
+  start_directory: postgresql
   panes:
   - shell_command:
     - vim
