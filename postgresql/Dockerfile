@@ -12,6 +12,15 @@ RUN apt-get install libreadline-dev zlib1g-dev flex bison libxml2-dev \
 RUN git clone git://git.postgresql.org/git/postgresql.git
 RUN cd postgresql && ./configure --with-tcl --with-perl --with-python \
     --with-pam --with-openssl --with-libxml --with-libxslt \
+    --mandir=/usr/local/share/postgresql/man \
+    --docdir=/usr/local/share/doc/postgresql-doc \
+    --sysconfdir=/etc/postgresql-common \
+    --datarootdir=/usr/local/share/ \
+    --datadir=/usr/local/share/postgresql \
+    --bindir=/usr/local/lib/postgresql/bin \
+    --libdir=/usr/local/lib/ \
+    --libexecdir=/usr/local/lib/postgresql/ \
+    --includedir=/usr/local/include/postgresql/ \
     --with-pgport=5432 \
     --enable-integer-datetimes \
     --enable-thread-safety \
@@ -25,19 +34,29 @@ RUN cd postgresql/contrib make install
 RUN cp postgresql/contrib/start-scripts/linux  /etc/init.d/postgresql 
 RUN chmod +x /etc/init.d/postgresql
 RUN update-rc.d postgresql defaults
-RUN echo 'PATH=$PATH:/usr/local/pgsql/bin; export PATH' > /etc/profile.d/postgresql.sh
-RUN echo 'MANPATH=$MANPATH:/usr/local/pgsql/man; export MANPATH' >> /etc/profile.d/pgmanual.sh
+RUN echo 'PATH=$PATH:/usr/local/lib/postgresql/bin; export PATH' > /etc/profile.d/postgresql.sh
+RUN echo 'MANPATH=$MANPATH:/usr/local/postgresql/man; export MANPATH' >> /etc/profile.d/pgmanual.sh
 RUN chmod 775 /etc/profile.d/postgresql.sh
 RUN chmod 775 /etc/profile.d/pgmanual.sh
 RUN . /etc/profile
-RUN adduser postgres --home /usr/local/pgsql --disabled-password --gecos ""
-RUN mkdir -p /var/log/pgsql
-RUN chown -R postgres:postgres /var/log/pgsql/
+RUN adduser postgres --disabled-password --gecos ""
+#RUN adduser postgres --home /usr/local/pgsql --disabled-password --gecos ""
+RUN mkdir -p /var/log/postgresql
+RUN chown -R postgres:postgres /var/log/postgresql/
 
-RUN mkdir /usr/local/pgsql/data
-RUN chown -R postgres:postgres /usr/local/pgsql/data
-RUN su - postgres -c "/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data"
+RUN mkdir /var/lib/postgresql/data
+RUN chown -R postgres:postgres /var/lib/postgresql/data
+RUN /sbin/ldconfig /usr/local/lib/postgresql
+#RUN su - postgres -c "/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data"
 
-CMD service postgresql start && tail /var/log/pgsql/pgsql.log
+RUN service postgresql start
+RUN ps -ax
+#RUN su - postgres -c "createuser -P -d -r -s docker"
+#CMD service postgresql start && tail -F /usr/local/pgsql/data/serverlog
+#CMD service postgresql start && /bin/bash
+
+ADD start /start
+RUN chmod 0755 /start
+CMD ["/start"]
 
 #RUN su - postgres -c "createuser -P -d -r -s docker"
