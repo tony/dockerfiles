@@ -3,7 +3,8 @@
 # LICENSE MIT https://github.com/stigi/dockerfile-postgresql/blob/master/LICENSE
 
 DATADIR="/var/lib/postgresql/data"
-CONF="/etc/postgresql-common/postgresql.conf"
+#CONF="/etc/postgresql-common/postgresql.conf"
+CONF="($DATADIR)/postgresql.conf"
 POSTGRES="/usr/local/lib/postgresql/bin/postgres"
 INITDB="/usr/local/lib/postgresql/bin/initdb"
 
