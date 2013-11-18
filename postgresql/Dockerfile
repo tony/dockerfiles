@@ -34,6 +34,9 @@ RUN cd postgresql && make install
 RUN cd postgresql/contrib make all
 RUN cd postgresql/contrib make install
 RUN cp postgresql/contrib/start-scripts/linux /etc/init.d/postgresql 
+RUN sed -i 's,/usr/local/pgsql/data,/var/lib/postgresql/data,g' /etc/init.d/postgresql
+RUN sed -i 's,/usr/local/pgsql,/usr/local/lib/postgresql,g' /etc/init.d/postgresql
+
 RUN chmod +x /etc/init.d/postgresql
 RUN update-rc.d postgresql defaults
 RUN echo 'PATH=$PATH:/usr/local/lib/postgresql/bin; export PATH' > /etc/profile.d/postgresql.sh
@@ -54,7 +57,8 @@ RUN su - postgres -c "/usr/local/lib/postgresql/bin/initdb \
     -D /var/lib/postgresql/data"
 #RUN su postgres sh -c "$INITDB $DATADIR"
 RUN su postgres sh -c "/usr/local/lib/postgresql/bin/postgres --single \
-    -D /var/lib/postgresql/data -c config_file=$CONF" | \
+    -D /var/lib/postgresql/data \
+    -c config_file=/var/lib/postgresql/data/postgresql.conf" | \
     echo "CREATE USER $USERNAME WITH SUPERUSER PASSWORD '$PASS';"
 
 #RUN su - postgres -c "createuser -P -d -r -s docker"
