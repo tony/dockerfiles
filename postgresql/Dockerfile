@@ -33,9 +33,9 @@ RUN cd postgresql && make
 RUN cd postgresql && make install
 RUN cd postgresql/contrib make all
 RUN cd postgresql/contrib make install
-#RUN cp postgresql/contrib/start-scripts/linux /etc/init.d/postgresql 
-#RUN chmod +x /etc/init.d/postgresql
-#RUN update-rc.d postgresql defaults
+RUN cp postgresql/contrib/start-scripts/linux /etc/init.d/postgresql 
+RUN chmod +x /etc/init.d/postgresql
+RUN update-rc.d postgresql defaults
 RUN echo 'PATH=$PATH:/usr/local/lib/postgresql/bin; export PATH' > /etc/profile.d/postgresql.sh
 RUN echo 'MANPATH=$MANPATH:/usr/local/postgresql/man; export MANPATH' >> /etc/profile.d/pgmanual.sh
 RUN chmod 775 /etc/profile.d/postgresql.sh
@@ -53,8 +53,8 @@ RUN /sbin/ldconfig /usr/local/lib/postgresql
 RUN su - postgres -c "/usr/local/lib/postgresql/bin/initdb \
     -D /var/lib/postgresql/data"
 #RUN su postgres sh -c "$INITDB $DATADIR"
-RUN su postgres sh -c "/usr/local/lib/postgresql/bin/postgres --single
-    -D /var/lib/postgresql/data -c config_file=$CONF" | 
+RUN su postgres sh -c "/usr/local/lib/postgresql/bin/postgres --single \
+    -D /var/lib/postgresql/data -c config_file=$CONF" | \
     echo "CREATE USER $USERNAME WITH SUPERUSER PASSWORD '$PASS';"
 
 #RUN su - postgres -c "createuser -P -d -r -s docker"
