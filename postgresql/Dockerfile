@@ -1,4 +1,8 @@
 FROM ubuntu
+#MAINTAINER Tony Narlock <tony@git-pull.com>
+
+EXPOSE 5432
+
 RUN apt-get update -y
 RUN apt-get upgrade -y
 RUN apt-get install build-essential -y
@@ -6,7 +10,14 @@ RUN apt-get install libreadline-dev zlib1g-dev flex bison libxml2-dev \
     libfl-dev libxslt1-dev libssl-dev libfl-dev python2.7-dev libpam-dev \
     tcl-dev libperl-dev git -y
 RUN git clone git://git.postgresql.org/git/postgresql.git
-RUN cd postgresql && ./configure --with-tcl --with-perl --with-python --with-pam --with-openssl --with-libxml --with-libxslt 
+RUN cd postgresql && ./configure --with-tcl --with-perl --with-python \
+    --with-pam --with-openssl --with-libxml --with-libxslt \
+    --with-pgport=5432 \
+    --enable-integer-datetimes \
+    --enable-thread-safety \
+    --enable-debug \
+    --disable-rpath \
+    --with-system-tzdata=/usr/share/zoneinfo
 RUN cd postgresql && make
 RUN cd postgresql && make install
 RUN cd postgresql/contrib make all
@@ -27,6 +38,6 @@ RUN mkdir /usr/local/pgsql/data
 RUN chown -R postgres:postgres /usr/local/pgsql/data
 RUN su - postgres -c "/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data"
 
-cmd service postgresql start && bash
+CMD service postgresql start && tail /var/log/pgsql/pgsql.log
 
 #RUN su - postgres -c "createuser -P -d -r -s docker"
