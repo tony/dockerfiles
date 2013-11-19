@@ -23,22 +23,22 @@ Building and debugging
 
 .. code-block:: bash
 
-    $ sudo docker run -i -t postgresql /bin/bash
+    $   sudo docker run -i -t postgresql /bin/bash
 
     # and when inside:
-    $ service postgresql start
+    $   service postgresql start
 
 Running
 =======
 
 .. code-block:: bash
 
-    $ CONTAINER=$(sudo docker run -d -p 5432 \
+    $   CONTAINER=$(sudo docker run -d -p 5432 \
         -t <your username>/postgresql)
 
-    $ CONTAINER_IP=$(sudo docker inspect $CONTAINER | grep IPAddress | \
-    awk '{ print $2 }' | tr -d ',"')
+    $   CONTAINER_IP=$(sudo docker inspect $CONTAINER | grep IPAddress | \
+        awk '{ print $2 }' | tr -d ',"')
 
     # on your local machine postgres' client
-    $ /usr/local/pgsql/bin/psql -p5432 -h $CONTAINER_IP --username='docker'\
-    --password --list
+    $   /usr/local/pgsql/bin/psql -p5432 -h $CONTAINER_IP \
+        --username='docker' --password --list
