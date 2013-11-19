@@ -45,29 +45,20 @@ RUN chmod 775 /etc/profile.d/postgresql.sh
 RUN chmod 775 /etc/profile.d/pgmanual.sh
 RUN . /etc/profile
 RUN adduser postgres --disabled-password --gecos ""
-#RUN adduser postgres --home /usr/local/pgsql --disabled-password --gecos ""
 RUN mkdir -p /var/log/postgresql
 RUN chown -R postgres:postgres /var/log/postgresql
 
 RUN mkdir -p /var/lib/postgresql/data
 RUN chown -R postgres:postgres /var/lib/postgresql/data
 RUN /sbin/ldconfig /usr/local/lib/postgresql
-#RUN su - postgres -c "/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data"
 RUN su - postgres -c "/usr/local/lib/postgresql/bin/initdb \
     -D /var/lib/postgresql/data"
-#RUN su postgres sh -c "$INITDB $DATADIR"
-RUN su postgres sh -c "/usr/local/lib/postgresql/bin/postgres --single \
+RUN echo "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" | \
+    su postgres sh -c "/usr/local/lib/postgresql/bin/postgres --single \
     -D /var/lib/postgresql/data \
-    -c config_file=/var/lib/postgresql/data/postgresql.conf" | \
-    echo "CREATE USER $USERNAME WITH SUPERUSER PASSWORD '$PASS';"
+    -c config_file=/var/lib/postgresql/data/postgresql.conf"
 
-#RUN su - postgres -c "createuser -P -d -r -s docker"
-#CMD service postgresql start && tail -F /usr/local/pgsql/data/serverlog
-#CMD service postgresql start && /bin/bash
+RUN echo "host    all     all   0.0.0.0/0     trust" >> /var/lib/postgresql/data/pg_hba.conf
+RUN echo "listen_addresses='*'" >> /var/lib/postgresql/data/postgresql.conf
 
-# ADD start /start
-# RUN chmod 0755 /start
-# CMD ["/start"]
-RUN service postgresql start
-
-#RUN su - postgres -c "createuser -P -d -r -s docker"
+CMD service postgresql start && tail -F /var/lib/postgresql/data/serverlog
