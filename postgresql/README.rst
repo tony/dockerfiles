@@ -34,7 +34,7 @@ Running
 .. code-block:: bash
 
     $   CONTAINER=$(sudo docker run -d -p 5432 \
-        -t <your username>/postgresql)
+        -t postgresql)
 
     $   CONTAINER_IP=$(sudo docker inspect $CONTAINER | grep IPAddress | \
         awk '{ print $2 }' | tr -d ',"')
