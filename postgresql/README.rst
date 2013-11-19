@@ -31,14 +31,14 @@ Building and debugging
 Running
 =======
 
-.. code-block::
+.. code-block:: bash
 
-    CONTAINER=$(sudo docker run -d -p 5432 \
+    $ CONTAINER=$(sudo docker run -d -p 5432 \
         -t <your username>/postgresql)
 
-    CONTAINER_IP=$(sudo docker inspect $CONTAINER | grep IPAddress | \
+    $ CONTAINER_IP=$(sudo docker inspect $CONTAINER | grep IPAddress | \
     awk '{ print $2 }' | tr -d ',"')
 
     # on your local machine postgres' client
-    /usr/local/pgsql/bin/psql -p5432 -h $CONTAINER_IP --username='docker'\
+    $ /usr/local/pgsql/bin/psql -p5432 -h $CONTAINER_IP --username='docker'\
     --password --list

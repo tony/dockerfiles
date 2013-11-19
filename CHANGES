@@ -1,0 +1,12 @@
+=========
+Changelog
+=========
+
+Here you can find the recent changes to tony's Dockerfile docs.
+
+2013-11-18
+----------
+
+- :ref:`postgresql` Dockerfile.
+
+.. todo:: vim: set filetype=rst:
