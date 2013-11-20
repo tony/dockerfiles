@@ -6,4 +6,7 @@ Postgresql
 
 .. include:: ../postgresql/README.rst
 
+Dockerfile
+----------
+
 .. literalinclude:: ../postgresql/Dockerfile
