@@ -11,7 +11,7 @@ the username and password ``docker`` and ``docker``.
 
 Currently it uses the release ``9.3.1``.
 
-The version can be adjusted by modifying the ``git checkout REL9_3_1` in
+The version can be adjusted by modifying the ``git checkout REL9_3_1`` in
 the ``Dockerfile``.
 
 Building and debugging
