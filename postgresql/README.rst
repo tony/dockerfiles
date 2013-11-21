@@ -40,5 +40,4 @@ Running
         awk '{ print $2 }' | tr -d ',"')
 
     # on your local machine postgres' client
-    $   /usr/local/pgsql/bin/psql -p5432 -h $CONTAINER_IP \
-        --username='docker' --password --list
+    $   psql -p5432 -h $CONTAINER_IP --username='docker' --password --list
